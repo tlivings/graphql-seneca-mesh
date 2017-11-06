@@ -1,0 +1,23 @@
+{
+  "name": "gateway",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server-hapi": "^1.2.0",
+    "graphql": "^0.11.7",
+    "graphql-server-hapi": "^1.2.0",
+    "graphql-tools": "^2.7.2",
+    "hapi": "^16.6.2",
+    "lodash.merge": "^4.6.0",
+    "seneca": "^3.4.3",
+    "seneca-balance-client": "^0.6.1",
+    "seneca-mesh": "^0.11.0"
+  }
+}

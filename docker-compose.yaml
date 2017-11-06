@@ -1,0 +1,15 @@
+gateway:
+    build: ./gateway
+    links:
+        - service1:service1
+        - service2:service2
+    ports:
+        - "8000:8000"
+service1:
+    build: ./service1
+    ports:
+        - "39999"
+service2:
+    build: ./service2
+    ports:
+        - "39999"
