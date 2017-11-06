@@ -1,0 +1,19 @@
+{
+    "connections": {
+       "web": {
+           "port": "8000",
+           "labels": ["web"]
+       }
+    },
+    "register": {
+        "graphql": {
+            "register": "require:./plugins/graphql-server",
+            "options": {
+                "partials": [
+                    "require:./partials/author.js",
+                    "require:./partials/book.js"
+                ]
+            }
+        }
+    }
+}

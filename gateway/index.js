@@ -1,55 +1,18 @@
 'use strict';
 
-const Seneca = require('seneca');
+const Steerage = require('steerage');
+const Path = require('path');
 const Hapi = require('hapi');
-const Apollo = require('apollo-server-hapi');
-const Merge = require('./lib/merge');
 
-const mesh = Seneca({log: 'debug'}).use('mesh', { isbase: true });
-
-const start = async function ({ port, partials = [] } = {}) {
+const start = async function () {
     const server = new Hapi.Server();
 
-    server.connection({ port: 8000 });
-
-    const schema = Merge([require('./lib/partials/book'), require('./lib/partials/author')]);
-
-    const act = function (a, b) {
-        return new Promise((resolve, reject) => {
-            mesh.act(a, b, function (error, result) {
-                if (error) {
-                    reject(error);
-                    return;
-                }
-                resolve(result);
-            });
-        });
-    };
-
-    await server.register([{
-        register: Apollo.graphqlHapi,
+    await server.register({
+        register: Steerage,
         options: {
-            path: '/graphql',
-            graphqlOptions: (request) => {
-                return {
-                  schema,
-                  context: { act, request },
-                  formatError: (err) => { console.log(err.stack); return err }
-                };
-            },
-            route: {
-              cors: true
-            }
+            config: Path.join(__dirname, 'config.json')
         }
-    }, {
-        register: Apollo.graphiqlHapi,
-        options: {
-            path: '/graphiql',
-            graphiqlOptions: {
-                endpointURL: '/graphql'
-            }
-        }
-    }]);
+    });
 
     await server.start();
 
