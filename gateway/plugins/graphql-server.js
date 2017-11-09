@@ -6,13 +6,14 @@ const Seneca = require('seneca');
 
 const register = async function (server, { partials }, next) {
 
-    const mesh = Seneca({log: 'debug'}).use('mesh', { isbase: true });
+    const mesh = Seneca({log: 'warn'}).use('mesh', { isbase: true });
 
     const schema = Merge(partials);
 
-    const act = function (a, b) {
+    const act = function (e, args) {
         return new Promise((resolve, reject) => {
-            mesh.act(a, b, function (error, result) {
+            console.log(`triggered ${JSON.stringify(e)} : ${JSON.stringify(args)}`);
+            mesh.act(e, args, function (error, result) {
                 if (error) {
                     reject(error);
                     return;

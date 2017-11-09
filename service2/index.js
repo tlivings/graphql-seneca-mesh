@@ -1,18 +1,27 @@
 'use strict';
 
 const Seneca = require('seneca');
+const DB = require('./db');
 
-const pattern = { query: 'book' };
+const db = new DB();
 
-const service = Seneca({log: 'debug'}).add(pattern, function (message, reply) {
-    reply(null, {
-        id: 1,
-        name: 'The Hobbit'
-    });
+const query = { query: 'book' };
+const mutation = { mutation: 'book' };
 
+const service = Seneca({log: 'warn'});
+
+service.add(query, function ({ id }, reply) {
+    reply(null, db.get(id));
+});
+
+service.add(mutation, function ({ name, author_id }, reply) {
+    reply(null, db.set({ name, author_id }));
 });
 
 service.use('mesh', {
     isbase: false,
-    pin: pattern
+    listen: [
+        { pin: query },
+        { pin: mutation }
+    ]
 });

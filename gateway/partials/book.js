@@ -1,12 +1,21 @@
 'use strict';
 
 const types = `
+    # This is a book.
     type Book {
         id: ID!
-        name: String
+        # The name of the book.
+        name: String,
+        # The book's author.
+        author: Author
     }
     extend type Query {
+        # Search for a book by id.
         book(id: ID!) : Book
+    }
+    extend type Mutation {
+        # Create a new book.
+        book(name: String!, author_id: ID!) : Book
     }
 `;
 
@@ -15,6 +24,16 @@ const resolvers = {
     Query: {
         book(_, { id }, { act }) {
             return act({ query: 'book' }, { id });
+        }
+    },
+    Mutation: {
+        book(_, { name, author_id }, { act }) {
+            return act({ mutation: 'book' }, { name, author_id });
+        }
+    },
+    Book: {
+        author(book, args, { act }) {
+            return act({ query: 'author' }, { id: book.author_id });
         }
     }
 };
